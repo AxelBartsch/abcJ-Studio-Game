@@ -5,37 +5,28 @@ using UnityEngine;
 using Random = System.Random;
 using System.Linq;
 
-public class ObstacleSelector : MonoBehaviour
+public class obstacleSelector : MonoBehaviour
 {
     Dictionary<HashSet<int>, int> Distances = new Dictionary<HashSet<int>, int>();
     Layout[] layouts = new Layout[1023];
     public int seed = 123098123;
     Random rand;
-    Layout currLayout;
-    int offset;
-    ObstacleGenerator gen;
     
     // Start is called before the first frame update
     void Start()
     {
         PopulateLayouts();
         rand = new Random(seed);
-        currLayout = layouts[0];
-        offset = 0;
-        gen = GetComponent<ObstacleGenerator>();
-        StartCoroutine(Event());
+        Layout currLayout = layouts[0];
+        Layout nextLayout = GetNextLayout(currLayout);
+        Debug.Log(nextLayout.NumObstacles);
     }
 
-    private IEnumerator Event()
+    // Update is called once per frame
+    void Update()
     {
-        yield return new WaitForSeconds(5f);
-        currLayout = GetNextLayout(currLayout);
-        offset += 100;
-        gen.MakeObstacle(currLayout, offset);
-        Debug.Log("Making Obstacle at " + offset.ToString());
         
     }
-
     void PopulateLayouts()
     {
         for (int i = 0; i < 1023; i++){
